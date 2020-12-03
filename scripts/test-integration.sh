@@ -7,9 +7,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
 	ROOT=$(dirname $(dirname $(readlink -f $0)))
 	# Electron 6 introduces a chrome-sandbox that requires root to run. This can fail. Disable sandbox via --no-sandbox.
-	# Production builds are run on docker containers where size of /dev/shm partition < 64MB which causes OOM failure
-	# for chromium compositor that uses the partition for shared memory
-	LINUX_EXTRA_ARGS="--no-sandbox --disable-dev-shm-usage"
+	LINUX_EXTRA_ARGS="--no-sandbox"
 fi
 
 VSCODEUSERDATADIR=`mktemp -d 2>/dev/null`
@@ -44,6 +42,13 @@ else
 	export VSCODE_CLI=1
 	export ELECTRON_ENABLE_STACK_DUMPING=1
 	export ELECTRON_ENABLE_LOGGING=1
+
+	# Production builds are run on docker containers where size of /dev/shm partition < 64MB which causes OOM failure
+	# for chromium compositor that uses the partition for shared memory
+	if [ "$LINUX_EXTRA_ARGS" ]
+	then
+		LINUX_EXTRA_ARGS="$LINUX_EXTRA_ARGS  --disable-dev-shm-usage"
+	fi
 
 	echo "Storing crash reports into '$VSCODECRASHDIR'."
 	echo "Running integration tests with '$INTEGRATION_TEST_ELECTRON_PATH' as build."
