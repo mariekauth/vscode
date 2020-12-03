@@ -11,8 +11,9 @@ schedules:
 resources:
   containers:
     - container: vscode-x64
-      image: vscodehub.azurecr.io/vscode-linux-build-agent:x64
+      image: vscodehub.azurecr.io/vscode-linux-build-agent:bionic
       endpoint: VSCodeHub
+      options: --user 0:0
     - container: vscode-arm64
       image: vscodehub.azurecr.io/vscode-linux-build-agent:stretch-arm64
       endpoint: VSCodeHub
