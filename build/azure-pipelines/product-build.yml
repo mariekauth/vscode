@@ -28,7 +28,7 @@ stages:
     jobs:
       - job: Compile
         pool:
-          vmImage: "Ubuntu-16.04"
+          vmImage: "Ubuntu-18.04"
         container: vscode-x64
         variables:
           VSCODE_ARCH: x64
@@ -71,7 +71,7 @@ stages:
       - Compile
     condition: and(succeeded(), eq(variables['VSCODE_COMPILE_ONLY'], 'false'))
     pool:
-      vmImage: "Ubuntu-16.04"
+      vmImage: "Ubuntu-18.04"
     jobs:
       - job: Linux
         condition: and(succeeded(), eq(variables['VSCODE_BUILD_LINUX'], 'true'))
